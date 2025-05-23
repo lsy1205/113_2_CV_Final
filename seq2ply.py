@@ -1,6 +1,7 @@
 import os 
 import os.path as osp
 from typing import List,Dict,Tuple
+import argparse
 
 from PIL import Image
 import cv2
@@ -253,7 +254,11 @@ def visualize_ply_point_cloud(ply_path):
     o3d.visualization.draw_geometries([pcd], point_show_normal=False)
     
 if __name__ == '__main__':
-    sequence_path = _your_sequence_path_
-    ply_path = _your_ply_path_
+    parser = argparse.ArgumentParser(description="Convert sequence to ply")
+    parser.add_argument('--seq_path', type=str, required=True, help='Path to the sequence directory')
+    parser.add_argument('--ply_path', type=str, required=True, help='Path to save the ply file')
+    args = parser.parse_args()
+    sequence_path = args.seq_path
+    ply_path = args.ply_path
     seq2ply(sequence_path, ply_path, kf_every =20, voxel_grid_size = 7.5e-3) 
     
