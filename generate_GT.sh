@@ -3,7 +3,7 @@
 SCENES_DIR="./7SCENES"
 GOLDEN_DIR="./Golden"
 
-for SEQ_PATH in "$SCENES_DIR"/*/t*/seq-*; do
+for SEQ_PATH in "$SCENES_DIR"/*/t*/*; do
     REL_DIR=$(dirname "${SEQ_PATH#$SCENES_DIR/}")   # stairs/train
     SEQ_NAME=$(basename "$SEQ_PATH")                # seq-XX
     OUT_DIR="$GOLDEN_DIR/$REL_DIR"
