@@ -5,8 +5,7 @@ import json
 import numpy as np
 from scipy.spatial import cKDTree as KDTree
 from plyfile import PlyData
-
-
+import argparse
 
 def accuracy(gt_points, rec_points):
     """
@@ -48,3 +47,15 @@ def load_points_from_ply(ply_path):
     return points
 
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="compute accuracy and completeness of reconstructed points")
+    parser.add_argument('--gt_ply', type=str, required=True, help='Path to the reconstructed ground truth point cloud file')
+    parser.add_argument('--rec_ply', type=str, default=None, help='Path to the predicted point cloud file')
+    args = parser.parse_args()
+
+    gt_points = load_points_from_ply(args.gt_ply)
+    rec_points = load_points_from_ply(args.rec_ply)
+    acc, acc_median = accuracy(gt_points, rec_points)
+    comp, comp_median = completion(gt_points, rec_points)
+    print(f"Accuracy: {acc:.4f}, Median Accuracy: {acc_median:.4f}")
+    print(f"Completeness: {comp:.4f}, Median Completeness: {comp_median:.4f}")
