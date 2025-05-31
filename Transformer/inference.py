@@ -36,7 +36,8 @@ def inference(args, path):
         rgb0, d0, rgbi, di = [batch[k].to(device) for k in ('rgb0','d0','rgbi','di')]
         posei = batch['pi'].to(device)
         fid   = batch['fid'].to(device)
-        fid_emb = torch.sin(torch.arange(0,384, device=device)[None,:] * fid[:,None] / 1000)
+        fid_emb_dim = model.embed_dim
+        fid_emb = torch.sin(torch.arange(0,fid_emb_dim, device=device)[None,:] * fid[:,None] / 1000)
 
         T_ref = se3_exp(model(rgb0,d0,rgbi,di,fid_emb)) @ posei   # (1,4,4)
 

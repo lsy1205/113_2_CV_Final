@@ -17,10 +17,11 @@ RESUME_CKPT  = None  # Path to a checkpoint to resume training, or None to start
 Path(CKPT_DIR).mkdir(exist_ok=True, parents=True)
 
 train_ratio   = 0.9
-learning_rate = 1e-2
+learning_rate = 1e-3
 w_decay       = 1e-4
 num_epochs    = 100
-batch_size    = 32
+batch_size    = 24
+warmup_epochs = 5
 
 # Loss function weights
 TRANSLATION_WEIGHT = 10.0  # Weight for translation loss
@@ -74,7 +75,15 @@ def train():
     
     scaler = GradScaler()
     
-    scheduler = CosineAnnealingLR(opt, T_max=num_epochs)
+    scheduler_cos = CosineAnnealingLR(opt, T_max=num_epochs - warmup_epochs, eta_min=1e-6)
+    scheduler_warm = torch.optim.lr_scheduler.LinearLR(
+        opt, start_factor=0.1, end_factor=1.0, total_iters=warmup_epochs
+    )
+    scheduler = torch.optim.lr_scheduler.SequentialLR(
+        opt, schedulers=[scheduler_warm, scheduler_cos],
+        milestones=[warmup_epochs]
+    )
+
     model.to(device)
 
     def geodesic(R):
@@ -94,7 +103,8 @@ def train():
                                 for k in ('rgb0','d0','rgbi','di')]
             pose0, posei, pose_gt = [batch[k].to(device) for k in ('p0','pi','pgti')]
             fid  = batch['fid'].to(device)
-            fid_emb = torch.sin(torch.arange(0,384, device=device)[None,:] * fid[:,None] / 1000)
+            fid_emb_dim = model.embed_dim
+            fid_emb = torch.sin(torch.arange(0,fid_emb_dim, device=device)[None,:] * fid[:,None] / 1000)
 
             with autocast():
                 delta   = model(rgb0, d0, rgbi, di, fid_emb)   # (B,6)
@@ -105,8 +115,11 @@ def train():
                 loss  = ROTATION_WEIGHT * R_err.mean() + TRANSLATION_WEIGHT * t_err.mean()
 
             scaler.scale(loss).backward()
+            scaler.unscale_(opt)                              # restore scale
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+
             scaler.step(opt)
-            opt.zero_grad()
+            opt.zero_grad(set_to_none=True)
             scaler.update()
 
         # --- validation ---
@@ -124,7 +137,8 @@ def train():
                 rgb0,d0,rgbi,di = [batch[k].to(device) for k in ('rgb0','d0','rgbi','di')]
                 posei, pose_gt = [batch[k].to(device) for k in ('pi','pgti')]
                 fid = batch['fid'].to(device)
-                fid_emb = torch.sin(torch.arange(0,384, device=device)[None,:]*fid[:,None]/1000)
+                fid_emb_dim = model.embed_dim
+                fid_emb = torch.sin(torch.arange(0,fid_emb_dim, device=device)[None,:]*fid[:,None]/1000)
 
                 delta = model(rgb0,d0,rgbi,di,fid_emb)
                 T_ref = se3_exp(delta) @ posei

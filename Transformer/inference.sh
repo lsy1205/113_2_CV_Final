@@ -19,5 +19,5 @@ echo "Start to inference poses of all frames."
 
 python inference.py --data_root ../7SCENES \
                     --predict_root ../predict_pose \
-                    --ckpt checkpoints/epoch100.pth \
+                    --ckpt checkpoints/best.pth \
                     --output_root $DEST_DIR
