@@ -13,19 +13,20 @@ from utility import se3_exp
 DATA_DIR     = "../7SCENES"
 PREDICT_DIR  = "../predict_pose"
 CKPT_DIR     = "./checkpoints"
-RESUME_CKPT  = None  # Path to a checkpoint to resume training, or None to start from scratch
+# RESUME_CKPT  = None
+RESUME_CKPT  = "./checkpoints/epoch016.pth"                 # Path to a checkpoint to resume training, or None to start from scratch
 Path(CKPT_DIR).mkdir(exist_ok=True, parents=True)
 
 train_ratio   = 0.9
-learning_rate = 1e-3
+learning_rate = 1e-4
 w_decay       = 1e-4
-num_epochs    = 100
+num_epochs    = 50
 batch_size    = 24
-warmup_epochs = 5
+warmup_ratio  = 0.1
 
 # Loss function weights
 TRANSLATION_WEIGHT = 10.0  # Weight for translation loss
-ROTATION_WEIGHT    = 5.0   # Weight for rotation loss
+ROTATION_WEIGHT    = 8.0   # Weight for rotation loss
 
 # ====== Dataset & Split ====== #
 def train():
@@ -45,12 +46,8 @@ def train():
     # ====== Model & Opt ====== #
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model  = RGBDRefineTransformerLarge(pretrained=True)
-    if RESUME_CKPT and os.path.exists(RESUME_CKPT):
-        ckpt = torch.load(resume, map_location='cpu')
-        model.load_state_dict(ckpt['model'] if 'model' in ckpt else ckpt, strict=True)
-        print(f"Resuming from {resume} at epoch {ckpt['epoch']}")
-    else:
-        print("Training from scratch")
+    
+    model.to(device)
 
     # Set up decay and no-decay parameter groups
     decay = []
@@ -68,13 +65,11 @@ def train():
 
     # Initialize optimizer
     opt    = optim.AdamW(param_groups, lr=learning_rate)
-    if RESUME_CKPT and os.path.exists(RESUME_CKPT):
-        opt.load_state_dict(ckpt['opt'])
-        print(f"Resuming optimizer state from {resume}")
 
-    
     scaler = GradScaler()
     
+    warmup_epochs = int(num_epochs * warmup_ratio)
+    print(f"Warmup epochs: {warmup_epochs}, Total epochs: {num_epochs}")
     scheduler_cos = CosineAnnealingLR(opt, T_max=num_epochs - warmup_epochs, eta_min=1e-6)
     scheduler_warm = torch.optim.lr_scheduler.LinearLR(
         opt, start_factor=0.1, end_factor=1.0, total_iters=warmup_epochs
@@ -84,25 +79,43 @@ def train():
         milestones=[warmup_epochs]
     )
 
-    model.to(device)
-
     def geodesic(R):
         return torch.acos(torch.clamp(
             (torch.diagonal(R,0,-2,-1).sum(-1) - 1)/2, -1+1e-6, 1-1e-6))
 
-    # ====== Train loop ====== #
-    best_trans = float('inf')
-    best_rot  = float('inf')
+    if RESUME_CKPT and os.path.exists(RESUME_CKPT):
+        ckpt = torch.load(RESUME_CKPT, map_location='cpu')
 
-    for epoch in range(num_epochs):
+        model.load_state_dict(ckpt['model'], strict=True)
+        opt.load_state_dict(ckpt['opt'])
+        scheduler.load_state_dict(ckpt['scheduler'])
+        best_trans = ckpt['best_trans']
+        best_rot   = ckpt['best_rot']
+        epoch      = ckpt['epoch']
+        print(f"Resuming from {RESUME_CKPT} at epoch {ckpt['epoch']}")
+    else:
+        print("Starting training from scratch...")
+        best_trans = float('inf')
+        best_rot   = float('inf')
+        epoch      = 0
+
+    
+    print(f"best_trans = {best_trans}")
+    print(f"best_rot   = {best_rot}")
+    print("Starting training...")
+
+    # ====== Train loop ====== #
+    while epoch < num_epochs:
         # --- training ---
         model.train()
-        print(f"EPOCH: {epoch+1}/{num_epochs}")
+        print(f"EPOCH: {epoch}/{num_epochs-1}")
         for batch in tqdm(train_loader):
             rgb0, d0, rgbi, di = [batch[k].to(device, non_blocking=True)
                                 for k in ('rgb0','d0','rgbi','di')]
             pose0, posei, pose_gt = [batch[k].to(device) for k in ('p0','pi','pgti')]
             fid  = batch['fid'].to(device)
+            fid = fid.clamp(min=0, max=999)
+
             fid_emb_dim = model.embed_dim
             fid_emb = torch.sin(torch.arange(0,fid_emb_dim, device=device)[None,:] * fid[:,None] / 1000)
 
@@ -137,6 +150,8 @@ def train():
                 rgb0,d0,rgbi,di = [batch[k].to(device) for k in ('rgb0','d0','rgbi','di')]
                 posei, pose_gt = [batch[k].to(device) for k in ('pi','pgti')]
                 fid = batch['fid'].to(device)
+                fid = fid.clamp(min=0, max=999)
+
                 fid_emb_dim = model.embed_dim
                 fid_emb = torch.sin(torch.arange(0,fid_emb_dim, device=device)[None,:]*fid[:,None]/1000)
 
@@ -157,21 +172,30 @@ def train():
         print(f"Loss: {loss.item():.4f}, Learning rate: {opt.param_groups[0]['lr']:.6f}")
         print(f"VALIDATION: trans {tot_tb/cnt*100:.2f}->{tot_ta/cnt*100:.2f} cm | "
               f"rot {tot_rb/cnt*57.3:.2f}°->{tot_ra/cnt*57.3:.2f}°")
-        scheduler.step()
 
         # --- checkpoint ---
-        torch.save({'epoch':epoch,
-                    'model':model.state_dict(),
-                    'opt'  :opt.state_dict()},
-                f"{CKPT_DIR}/epoch{epoch:03d}.pth")
+        torch.save({'epoch'      : epoch,
+                    'model'      : model.state_dict(),
+                    'opt'        : opt.state_dict(),
+                    'scheduler'  : scheduler.state_dict(),
+                    'best_trans' : best_trans,
+                    'best_rot'   : best_rot,
+                    'epoch'      : epoch,
+                    }, f"{CKPT_DIR}/epoch{epoch:03d}.pth")
         if tot_ta < best_trans and tot_ra < best_rot:
-            print(f"New best model at epoch {epoch+1}, saving...")
+            print(f"New best model at epoch {epoch}, saving...")
             best_trans = tot_ta
             best_rot = tot_ra
-            torch.save({'epoch':epoch,
-                        'model':model.state_dict(),
-                        'opt'  :opt.state_dict()},
-                    f"{CKPT_DIR}/best.pth")
+            torch.save({'epoch'      : epoch,
+                        'model'      : model.state_dict(),
+                        'opt'        : opt.state_dict(),
+                        'scheduler'  : scheduler.state_dict(),
+                        'best_trans' : best_trans,
+                        'best_rot'   : best_rot,
+                        'epoch'      : epoch,
+                        }, f"{CKPT_DIR}/best.pth")
+        epoch += 1
+        scheduler.step()
 
 
 if __name__ == '__main__':

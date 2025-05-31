@@ -6,3 +6,4 @@ predict_pose*/
 __pycache__/
 checkpoints
 Transformer/refined_pose
+all_pose
