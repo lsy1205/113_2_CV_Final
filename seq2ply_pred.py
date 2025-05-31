@@ -114,7 +114,7 @@ class SevenSceneSequence:
                 posepath = osp.join(self.seq_dir_path, f"{name}.pose.txt")
             else:
                 posepath = osp.join(self.predict_pose_path, f"{name}.pose.txt")
-            print(f"Reading {posepath}...")
+            # print(f"Reading {posepath}...")
             view["name"] = f'{self.seq_dir_path}/{name}'
 
             rgb_image = imread_cv2(impath)
@@ -267,9 +267,11 @@ if __name__ == '__main__':
     parser.add_argument('--seq_path', type=str, required=True, help='Path to the sequence directory')
     parser.add_argument('--predict_pose_path', type=str, default=None, help='Path to the predicted pose file')
     parser.add_argument('--ply_path', type=str, required=True, help='Path to save the ply file')
+    parser.add_argument('--kf_every', type=int, default=20, help='Select key frame every kf_every frames for building points cloud')
     args = parser.parse_args()
     sequence_path = args.seq_path
     predict_pose_path = args.predict_pose_path
     ply_path = args.ply_path
-    seq2ply(sequence_path, predict_pose_path, ply_path, kf_every =20, voxel_grid_size = 7.5e-3) 
+    kf_every = args.kf_every
+    seq2ply(sequence_path, predict_pose_path, ply_path, kf_every = kf_every, voxel_grid_size = 7.5e-3) 
     

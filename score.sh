@@ -13,5 +13,5 @@ for SEQ_PATH in "$GOLDEN_DIR"/*/t*/*; do
     
     echo "Score for Ground Truth: $GT_PATH -> Reconstruction: $REC_PATH"
     
-    # python utils.py --gt_ply "$SEQ_PATH" --rec_ply "$PLY_PATH"
+    python utils.py --gt_ply "$SEQ_PATH" --rec_ply "$REC_PATH"
 done
