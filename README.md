@@ -64,7 +64,7 @@ Accuracy = 0.0, Completeness = 0.51
 ```
 
 2. Inference on DUSt3R and predict the pose.txt of each picture\
-Then utilize the matrices transformation to get a more precise position.
+Then utilize the matrices transformation to get a more precise position.\
 Accuracy = 0.18, Completeness = 0.05
 
 
