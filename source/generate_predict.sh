@@ -1,12 +1,12 @@
 #!/bin/bash
 
-SCENES_DIR="./7SCENES"
+SCENES_DIR="../7SCENES"
 # POSE_DIR="./Transformer/refined_pose_v0"
-POSE_DIR="./all_pose"
+POSE_DIR="./pose_dust"
 PLY_DIR="./predict"
 PYTHON_PATH=./seq2ply_pred.py
 
-for SEQ_PATH in "$SCENES_DIR"/*/te*/seq-*; do
+for SEQ_PATH in "$SCENES_DIR"/*/te*/seq*; do
     REL_DIR=$(dirname "${SEQ_PATH#$SCENES_DIR/}")   # stairs/train
     SEQ_NAME=$(basename "$SEQ_PATH")                # seq-XX
 

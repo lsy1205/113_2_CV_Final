@@ -10,9 +10,9 @@ from model   import RGBDRefineTransformerLarge
 from utility import se3_exp
 
 # ====== Config ====== #
-DATA_DIR     = "../7SCENES"
-PREDICT_DIR  = "../predict_pose"
-CKPT_DIR     = "./checkpoints_100"
+DATA_DIR     = "../../7SCENES"
+PREDICT_DIR  = "../pose_fast"
+CKPT_DIR     = "./checkpoints"
 RESUME_CKPT  = None
 # RESUME_CKPT  = "./checkpoints/epoch021.pth"                 # Path to a checkpoint to resume training, or None to start from scratch
 Path(CKPT_DIR).mkdir(exist_ok=True, parents=True)

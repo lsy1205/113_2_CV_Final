@@ -273,6 +273,7 @@ if __name__ == '__main__':
     predict_pose_path = args.predict_pose_path
     ply_path = args.ply_path
     kf_every = args.kf_every
-    # seq2ply(sequence_path, predict_pose_path, ply_path, kf_every = kf_every, voxel_grid_size = 7.5e-3) 
-    seq2ply(sequence_path, predict_pose_path, ply_path, kf_every = 50, voxel_grid_size = 2.5e-3) 
+    seq2ply(sequence_path, predict_pose_path, ply_path, kf_every = kf_every, voxel_grid_size = 7.5e-3) 
+    # seq2ply(sequence_path, predict_pose_path, ply_path, kf_every = 1, voxel_grid_size = 7.5e-3) 
+    # seq2ply(sequence_path, predict_pose_path, ply_path, kf_every = 50, voxel_grid_size = 2.5e-3) 
     

@@ -1,7 +1,9 @@
 #!/bin/bash
 
-GOLDEN_DIR="../TA_Golden/test"
-PREDICT_DIR="../test_dust_transformer"
+GOLDEN_DIR="../TA_Golden/bonus"
+PREDICT_DIR="../bonus"
+# GOLDEN_DIR="../TA_Golden/test"
+# PREDICT_DIR="../test"
 
 for PLY_PATH in "$GOLDEN_DIR"/*; do
     echo "Processing $PLY_PATH"
