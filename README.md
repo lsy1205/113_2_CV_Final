@@ -56,17 +56,25 @@ pip install -e .
 ``` bash
 pip install timm 
 ```
-## 3D Reconstruction:
-1. Directly use seq2ply to reconstruct the 3d point cloud\
+## 3D Reconstruction :
+1. Directly use seq2ply to reconstruct the 3d point cloud<br>
 Accuracy = 0.0, Completeness = 0.51
 ```bash
 
 ```
 
-2. Inference on DUSt3R and predict the pose.txt of each picture\
-Then utilize the matrices transformation to get a more precise position.\
+2. Inference on DUSt3R and predict the pose.txt of each picture<br>
+Then utilize the matrices transformation to get a more precise position.
 Accuracy = 0.18, Completeness = 0.05
+```bash
 
+```
+
+3. Employed DUSt3R with a post-processing step, followed by a transformer-based refinement of the predicted poses.<br>
+Accuracy = 0.16, Completeness = 0.1
+```bash
+
+```
 
 ## Results
 * Accuracy = 0.0, Completeness = 0.51 <br>
