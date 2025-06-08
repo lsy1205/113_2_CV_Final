@@ -60,7 +60,8 @@ pip install timm
 1. Directly use seq2ply to reconstruct the 3d point cloud<br>
 Accuracy = 0.0, Completeness = 0.51
 ```bash
-
+cd source/dust3r/
+python usage.py
 ```
 
 2. Inference on DUSt3R and predict the pose.txt of each picture<br>
