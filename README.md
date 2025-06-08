@@ -58,7 +58,8 @@ pip install timm
 ```
 ## 3D Reconstruction :
 1. Directly use seq2ply to reconstruct the 3d point cloud<br>
-Accuracy = 0.0, Completeness = 0.51
+Accuracy = 0.0, Completeness = 0.51<br>
+(p.s. assuming that the /7SCENES is as at the same level as /source file)
 ```bash
 cd source/dust3r/
 python usage.py
