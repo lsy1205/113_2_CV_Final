@@ -19,7 +19,7 @@ if __name__ == '__main__':
     model = AsymmetricCroCo3DStereo.from_pretrained(model_name).to(device)
     # load_images can take a list of images or a directory
     classification = ['chess', 'fire', 'heads', 'office', 'pumpkin', 'redkitchen', 'stairs'] #
-    path = '../../../7SCENES'
+    path = '../7SCENES'
     for class_name in classification:
         joined_path = os.path.join(path, class_name, 'test')
         if not os.path.exists(joined_path):
