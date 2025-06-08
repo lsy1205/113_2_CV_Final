@@ -1,17 +1,11 @@
 #!/bin/bash
 
-GOLDEN_DIR="./Golden"
-PREDICT_DIR="./predict"
+GOLDEN_DIR="../TA_Golden/test"
+PREDICT_DIR="../test_dust_transformer"
 
-for SEQ_PATH in "$GOLDEN_DIR"/*/te*/seq-*; do
-    REL_DIR=$(dirname "${SEQ_PATH#$GOLDEN_DIR/}")   # stairs/train
-    SEQ_NAME=$(basename "$SEQ_PATH")                # seq-XX
-
-    
-    GT_PATH="$SEQ_PATH"
-    REC_PATH="$PREDICT_DIR/$REL_DIR/$SEQ_NAME"
-    
-    echo "Score for Ground Truth: $GT_PATH -> Reconstruction: $REC_PATH"
-    
-    python utils.py --gt_ply "$SEQ_PATH" --rec_ply "$REC_PATH"
+for PLY_PATH in "$GOLDEN_DIR"/*; do
+    echo "Processing $PLY_PATH"
+    PLY_FILE=$(basename "$PLY_PATH")
+    # echo "$PLY_FILE"    
+    python utils.py --gt_ply "$PLY_PATH" --rec_ply "$PREDICT_DIR/$PLY_FILE"
 done
