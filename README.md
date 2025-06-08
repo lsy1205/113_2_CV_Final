@@ -58,18 +58,18 @@ pip install timm
 ```
 ## 3D Reconstruction :
 1. Directly use seq2ply to reconstruct the 3d point cloud<br>
-Accuracy = 0.0, Completeness = 0.51<br>
-(p.s. assuming that the /7SCENES is as at the same level as /source file)
+Accuracy = 0.0, Completeness = 0.51
 ```bash
-cd source/dust3r/
-python usage.py
+
 ```
 
 2. Inference on DUSt3R and predict the pose.txt of each picture<br>
 Then utilize the matrices transformation to get a more precise position.
-Accuracy = 0.18, Completeness = 0.05
+Accuracy = 0.18, Completeness = 0.05<br>
+(p.s. assuming that the /7SCENES is as at the same level as /source file)
 ```bash
-
+cd source/dust3r/
+python usage.py
 ```
 
 3. Employed DUSt3R with a post-processing step, followed by a transformer-based refinement of the predicted poses.<br>
