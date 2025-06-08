@@ -7,4 +7,4 @@ __pycache__/
 checkpoints*
 Transformer/refined_pose*
 all_pose
-icp_pose
+temp

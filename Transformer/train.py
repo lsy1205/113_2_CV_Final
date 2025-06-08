@@ -12,15 +12,15 @@ from utility import se3_exp
 # ====== Config ====== #
 DATA_DIR     = "../7SCENES"
 PREDICT_DIR  = "../predict_pose"
-CKPT_DIR     = "./checkpoints"
-# RESUME_CKPT  = None
-RESUME_CKPT  = "./checkpoints/epoch016.pth"                 # Path to a checkpoint to resume training, or None to start from scratch
+CKPT_DIR     = "./checkpoints_100"
+RESUME_CKPT  = None
+# RESUME_CKPT  = "./checkpoints/epoch021.pth"                 # Path to a checkpoint to resume training, or None to start from scratch
 Path(CKPT_DIR).mkdir(exist_ok=True, parents=True)
 
 train_ratio   = 0.9
 learning_rate = 1e-4
 w_decay       = 1e-4
-num_epochs    = 50
+num_epochs    = 100
 batch_size    = 24
 warmup_ratio  = 0.1
 
@@ -72,7 +72,7 @@ def train():
     print(f"Warmup epochs: {warmup_epochs}, Total epochs: {num_epochs}")
     scheduler_cos = CosineAnnealingLR(opt, T_max=num_epochs - warmup_epochs, eta_min=1e-6)
     scheduler_warm = torch.optim.lr_scheduler.LinearLR(
-        opt, start_factor=0.1, end_factor=1.0, total_iters=warmup_epochs
+        opt, start_factor=0.5, end_factor=1.0, total_iters=warmup_epochs
     )
     scheduler = torch.optim.lr_scheduler.SequentialLR(
         opt, schedulers=[scheduler_warm, scheduler_cos],

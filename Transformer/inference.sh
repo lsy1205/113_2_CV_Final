@@ -18,6 +18,6 @@ echo "Finish copying frame 0 pose files."
 echo "Start to inference poses of all frames."
 
 python inference.py --data_root ../7SCENES \
-                    --predict_root ../predict_pose \
+                    --predict_root ../all_pose \
                     --ckpt checkpoints/best.pth \
                     --output_root $DEST_DIR

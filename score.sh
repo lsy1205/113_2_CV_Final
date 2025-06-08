@@ -3,7 +3,7 @@
 GOLDEN_DIR="./Golden"
 PREDICT_DIR="./predict"
 
-for SEQ_PATH in "$GOLDEN_DIR"/*/t*/*; do
+for SEQ_PATH in "$GOLDEN_DIR"/*/te*/seq-*; do
     REL_DIR=$(dirname "${SEQ_PATH#$GOLDEN_DIR/}")   # stairs/train
     SEQ_NAME=$(basename "$SEQ_PATH")                # seq-XX
 

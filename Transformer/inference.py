@@ -30,6 +30,7 @@ def inference(args, path):
 
     model = RGBDRefineTransformerLarge().to(device)
     ckpt  = torch.load(args.ckpt, map_location='cpu')
+    print(f"Loading checkpoint from {args.ckpt}")
     model.load_state_dict(ckpt['model'] if 'model' in ckpt else ckpt, strict=True)
     model.eval()
 
@@ -65,6 +66,6 @@ if __name__ == '__main__':
     ap.add_argument('--output_root',  required=True)
     ap.add_argument('--batch_size', type=int, default=24)
     args = ap.parse_args()
-    # inference(args, path="train")
+    inference(args, path="train")
     inference(args, path="test")
     
