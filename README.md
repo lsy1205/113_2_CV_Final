@@ -56,7 +56,8 @@ pip install -e .
 ``` bash
 pip install timm 
 ```
-## 3D Reconstruction :
+## 3D Reconstruction : 
+(Please refer to our GitHub README.md : https://github.com/lsy1205/113_2_CV_Final.git)
 1. Directly use seq2ply to reconstruct the 3d point cloud<br>
 Accuracy = 0.0, Completeness = 0.51
 ```bash
