@@ -69,19 +69,12 @@ Accuracy = 0.18, Completeness = 0.05
 
 
 ## Results
-* Accuracy = 0.0, Completeness = 0.51\
+* Accuracy = 0.0, Completeness = 0.51 <br>
 The test result is in the folder *test*
-The bonus result is in the folder *bonus*
 
-* Accuracy = 0.18, Completeness = 0.05\
-The test result is in the folder *test_dust*
-The bonus result is in the folder *bonus_dust*
+* Accuracy = 0.18, Completeness = 0.05 <br>
+The test result is in the folder *test_dust* <br>
+The bonus result is in the folder *bonus* (We choose this method to generate our bonus result)
 
-* Accuracy = 0.16, Completeness = 0.1\
+* Accuracy = 0.16, Completeness = 0.1 <br>
 The test result is in the folder *test_dust_transformer*
-The bonus result is in the folder *bonus_dust_transformer*
-
-
-
-
-

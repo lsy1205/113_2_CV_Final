@@ -5,7 +5,8 @@ DS_Store/
 Golden
 TA_Golden
 
-test*/
+bonus
+test*
 predict/
 source/Transformer/refined_pose*
 all_pose
