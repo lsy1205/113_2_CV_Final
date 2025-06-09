@@ -21,6 +21,7 @@ for SEQ_PATH in "$SCENES_DIR"/*/te*/sp*; do
 done
 
 GOAL_PATH="../bonus"
+mkdir -p "$GOAL_PATH"
 
 for PLY_PATH in "$PRED_DIR"/*/test/sp*; do
     # echo "Processing $PLY_PATH"
