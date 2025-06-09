@@ -232,10 +232,13 @@ bash generate_bonus.sh
 cd ../
 ```
 
-### Training the Customized Transformer
+### Training the Customized Transformer (Optional)
 All of the customized transformer files are placed in the `./source/Transformer` folder.
 
-To train the customized transformer, you can run the shell script below.
+This section is only required if you wish to train the transformer using your own predicted poses.  
+You can run the shell script below to start training.  
+Be sure to update the `PREDICT_DIR` variable in `train.py` to point to your prediction directory.
+
 ```bash
 cd ./source/Transformer
 python train.py
