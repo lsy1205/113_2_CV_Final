@@ -38,7 +38,7 @@ pip install -r requirements_optional.txt
 # DUST3R relies on RoPE positional embeddings for which you can compile some cuda kernels for faster runtime.
 cd croco/models/curope/
 python setup.py build_ext --inplace
-cd ../../../
+cd ../../../../
 ```
 3. Install Timm and other packages for Customized Transformer, Download, and 3D Reconstruction
 ``` bash
@@ -69,6 +69,7 @@ pip install -r requirements.txt
 
 # install fast3r as a package (so you can import fast3r and use it in your own project)
 pip install -e .
+cd ../
 ```
 2. Install Timm and other packages for Customized Transformer, Download, and 3D Reconstruction
 ``` bash
