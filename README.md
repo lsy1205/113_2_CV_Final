@@ -14,9 +14,9 @@
 ## Group: 3d_macarons 
 
 ## Members:
-R13942173 彭柏翔
-R13921040 劉瑄穎
-R12521530 游文歆
+* R13942173 彭柏翔
+* R13921040 劉瑄穎
+* R12521530 游文歆
 
 ## Environment Setup:
 ### DUSt3R
@@ -229,7 +229,55 @@ All of the customized transformer files are placed in the `./source/Transformer`
 
 ## Other Utility Files
 * `color_image_to_video.py`
+
+    This script converts color images into an MP4 video file.  
+    We use the generated video to observe the characteristics of the image sequence.  
+    Through this, we found that dense sequences exhibit continuous and consistent color frames.
+
+    **Example Usage:**
+    ```bash
+    python color_image_to_video.py --input ../7SCENES/chess/test/seq-03 --output test.mp4
+    ```
+
 * `ICP_correction.py`
+
+    This script performs ICP correction on the predicted poses.  
+    You can refer to `generate_icp.sh` for an example of how to use it.
+
+    **Example Usage:**
+
+    ```bash
+    python ICP_correction.py --color_dir [path to color image folder] \
+                             --depth_dir [path to depth image folder] \
+                             --pred_pose_dir [path to predicted pose folder] \
+                             --out_pose_dir [path to the output folder]
+    ```
+
 * `seq2ply.py`
-* `seq2ply_pred.py`
+
+    This script reconstructs 3D point clouds using color images, depth images, and ground truth poses.
+
+    **Example Usage:**
+    ```bash
+    python seq2ply.py --seq_path [path to the sequence] \
+                    --ply_path [path to the output 3D point cloud]
+    ```
+
+* `seq2ply_pred.py`  
+    This script reconstructs 3D point clouds using color images, depth images, and predicted poses.  
+    The main difference from `seq2ply.py` is that this script includes a parameter to specify the path to the predicted poses.
+    **Example Usage:**
+    ```bash
+    python seq2ply_pred.py --seq_path [path to the sequence] \
+                           --predict_pose_path [path to the predicted pose] \
+                           --ply_path [path to the output 3D point cloud] \
+    ```
+
 * `utils.py`
+    This script is used to evaluate reconstructed point clouds against the ground truth.  
+    You can refer to `score.sh` for an example of how to use it.
+
+    **Example Usage:**
+    ```bash
+    python utils.py --gt_ply [path to the ground truth point cloud] --rec_ply [path to the reconstructed point cloud]
+    ```
