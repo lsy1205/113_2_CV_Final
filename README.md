@@ -19,6 +19,7 @@
 * R12521530 游文歆
 
 ## Environment Setup:
+We recommend skipping the environment setup for **Fast3R**. 
 ### DUSt3R
 1. Create the environment, here we show an example using conda.
 ``` bash
@@ -146,6 +147,7 @@ For **train** sequences, poses for **all frames** should be provided.
 ```
 
 ### Reproducing the 3 Results
+We recommend skipping all the **optional** steps in this section, as they are typically time-consuming.
 
 1. Directly use seq2ply to reconstruct the 3d point cloud.<br>
 **Accuracy = 0.0, Completeness = 0.51**
@@ -162,7 +164,7 @@ Then utilize the matrices transformation to get a more precise position.<br>
     ```bash
     cd ./source
     ```
-    (2) Generate poses using DUSt3R.(Optional) 
+    (2) (Optional) Generate poses using DUSt3R. 
     
     This step is **optional**. We have already provided the generated poses in the `pose_dust` directory.
 
@@ -199,7 +201,7 @@ Then utilize the matrices transformation to get a more precise position.<br>
     cd ./source
     ```
 
-    (2) Refine DUSt3R Poses Using a Customized Transformer (Optional)
+    (2) (Optional) Refine DUSt3R Poses Using a Customized Transformer. 
 
     This step is optional, as we have already provided the refined poses in the `refined_pose` directory.
 
