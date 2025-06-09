@@ -194,14 +194,14 @@ Then utilize the matrices transformation to get a more precise position.<br>
     cd ../
     ```
 
-3. Use DUSt3R to generate initial pose predictions, applied post-processing, and then refined the results using a transformer-based model.<br>
+3. Use Fast3R to generate initial pose predictions, applied post-processing, and then refined the results using a transformer-based model.<br>
 **Accuracy = 0.16, Completeness = 0.1**  
     (1) Go into the `source` directory
     ```bash
     cd ./source
     ```
 
-    (2) (Optional) Refine DUSt3R Poses Using a Customized Transformer. 
+    (2) (Optional) Refine Fast3R Poses Using a Customized Transformer. 
 
     This step is optional, as we have already provided the refined poses in the `refined_pose` directory.
 
@@ -214,8 +214,8 @@ Then utilize the matrices transformation to get a more precise position.<br>
     cd ../
     ```
 
-    The input to the transformer is the `pose_dust` directory we provide by default.  
-    If you generated the poses yourself (i.e., by running step (2) in the previous section),  
+    The input to the transformer is the `pose_fast` directory we provide by default.  
+    If you generated the poses yourself (i.e., use Fast3R/Dust3R to predict poses),  
     you can update the `POSE_DIR` variable in the `inference.sh` script accordingly.
 
 
