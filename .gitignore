@@ -9,10 +9,13 @@ TA_Golden
 
 # Point Clouds
 bonus
-test/
+/test/*
 test_dust/
 test_dust_transformer/
 predict/
+
+# Poses
+predict_pose
 
 # Transformer
 checkpoints*
