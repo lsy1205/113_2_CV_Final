@@ -1,15 +1,16 @@
+# Miscellaneous
+temp
 __pycache__/
 DS_Store/
 
+# Dataset and Ground Truth
 7SCENES*
-Golden
 TA_Golden
 
+# Point Clouds
 bonus*
 test*
 predict/
-source/Transformer/refined_pose*
-all_pose
-checkpoints*
 
-temp
+# Transformer
+checkpoints*

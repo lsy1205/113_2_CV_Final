@@ -1,5 +1,16 @@
 # 113_2 Computer Vision Final Project - Microsoft 3D Reconstruction
 
+## Links
+1. GitHub Repository 
+
+    [Link](https://github.com/lsy1205/113_2_CV_Final.git)
+    ```bash 
+    git clone https://github.com/lsy1205/113_2_CV_Final.git
+    ```
+2. Report
+
+    [Link](https://docs.google.com/document/d/1bfUDjlT-mH5iGmYgFJJ8f5ZCTbWA8-vZiz1gJkuIbnU/edit?usp=sharing)
+
 ## Group: 3d_macarons 
 
 ## Members:
@@ -11,7 +22,7 @@ R12521530 游文歆
 ### DUSt3R
 1. Create the environment, here we show an example using conda.
 ``` bash
-cd dust3r
+cd ./source/dust3r
 conda create -n dust3r python=3.11 cmake=3.14.0
 conda activate dust3r 
 conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia  # use the correct version of cuda for your system
@@ -32,12 +43,19 @@ cd ../../../
 3. Install Timm for Customized Transformer
 ``` bash
 pip install timm 
+pip install gdown
+pip install open3d
+pip install plyfile
 ```
 
-### Fast3R (Optional, Our test Files does not use Fast3R to generate poses)
+### Fast3R (Optional)
+
+Our provided test files do **not** use Fast3R to generate camera poses.  
+This section is only relevant if you wish to experiment with Fast3R-based pose estimation.
+
 1. Installation
 ```bash
-cd fast3r
+cd ./source/fast3r
 
 # create conda environment
 conda create -n fast3r python=3.11 cmake=3.14.0 -y
@@ -55,28 +73,9 @@ pip install -e .
 2. Install Timm for Customized Transformer
 ``` bash
 pip install timm 
-```
-## 3D Reconstruction : 
-(Please refer to our GitHub README.md : https://github.com/lsy1205/113_2_CV_Final.git .  Sorry we're not finish yet.)
-1. Directly use seq2ply to reconstruct the 3d point cloud<br>
-Accuracy = 0.0, Completeness = 0.51
-```bash
-
-```
-
-2. Inference on DUSt3R and predict the pose.txt of each picture<br>
-Then utilize the matrices transformation to get a more precise position.
-Accuracy = 0.18, Completeness = 0.05<br>
-(p.s. assuming that the /7SCENES is as at the same level as /source file)
-```bash
-cd source/dust3r/
-python usage.py
-```
-
-3. Employed DUSt3R with a post-processing step, followed by a transformer-based refinement of the predicted poses.<br>
-Accuracy = 0.16, Completeness = 0.1
-```bash
-
+pip install gdown
+pip install open3d
+pip install plyfile
 ```
 
 ## Results
@@ -89,3 +88,148 @@ The bonus result is in the folder *bonus* (We choose this method to generate our
 
 * Accuracy = 0.16, Completeness = 0.1 <br>
 The test result is in the folder *test_dust_transformer*
+
+To get the **test** point clouds and the **bonus** point clouds, you can run the command below.
+
+```bash
+bash get_bonus.sh
+bash get_tests.sh
+```
+
+## 3D Reconstruction
+In this section, we demonstrate how to reproduce our results step by step.
+
+We will walk through the process of generating the three reconstruction results described earlier in the [Results](#results) section.
+
+### Preprocess
+Please place the **7SCENES** dataset folder in the root directory of this repository — that is, at the same level as the `source` directory.
+```bash
+repo_root/
+├── 7SCENES/
+├── bonus
+├── source/
+├── test
+└── README.md
+```
+
+The **7SCENES** dataset should follow the directory structure shown below.
+
+For **test** sequences, only the pose of **frame 0** is required.  
+For **train** sequences, poses for **all frames** should be provided.
+
+```bash
+├── chess
+│   ├── test
+│   │   ├── seq-xx
+│   │   │   ├── frame-xxxxxx.color.png
+│   │   │   ├── frame-xxxxxx.depth.png
+│   │   │   └── frame-xxxxxx.depth.proj.png
+│   │   └── sparse-seq-xx
+│   └── train
+│       └── seq-xx
+│           ├── frame-xxxxxx.color.png
+│           ├── frame-xxxxxx.depth.png
+│           ├── frame-xxxxxx.depth.proj.png
+│           └── frame-xxxxxx.pose.txt
+├── fire
+├── heads
+├── office
+├── pumpkin
+├── redkitchen
+└── stairs
+```
+
+### Reproducing the 3 Results
+
+1. Directly use seq2ply to reconstruct the 3d point cloud.<br>
+**Accuracy = 0.0, Completeness = 0.51**
+    ```bash
+    cd ./source
+    bash generate_result1.sh
+    cd ../
+    ```
+
+2. Inference on DUSt3R and predict the pose.txt of each picture<br>
+Then utilize the matrices transformation to get a more precise position.<br>
+**Accuracy = 0.18, Completeness = 0.05<br>**
+    (1) Go into the `source` directory
+    ```bash
+    cd ./source
+    ```
+    (2) Generate poses using DUSt3R.(Optional) 
+    
+    This step is **optional**. We have already provided the generated poses in the `pose_dust` directory.
+
+    Note that this process is quite time-consuming.
+
+
+    ```bash
+    cd ./dust3r/
+    python usage.py
+    cd ../
+    ```
+
+    If you choose to run this step, please make sure to update the `POSE_DIR` variable in `generate_result2.sh` accordingly.  
+    Specifically, the `predict_path` in `usage.py` must match the `POSE_DIR` specified in `generate_result2.sh`.
+
+    You also need to copy the ground truth pose of frame 0 into the `predict_path` directory.  
+    Make sure that the `DEST_DIR` variable in `copy_frame0.sh` matches the `predict_path` specified in `usage.py`.
+
+    ```bash
+    bash copy_frame0.sh
+    ```
+
+
+    (3) Generate the point clouds with the predicted poses.
+    ```bash
+    bash generate_result2.sh
+    cd ../
+    ```
+
+3. Use DUSt3R to generate initial pose predictions, applied post-processing, and then refined the results using a transformer-based model.<br>
+**Accuracy = 0.16, Completeness = 0.1**
+    (1) Go into the `source` directory
+    ```bash
+    cd ./source
+    ```
+
+    (2) Refine DUSt3R Poses Using a Customized Transformer (Optional)
+
+    This step is optional, as we have already provided the refined poses in the `refined_pose` directory.
+
+    If you wish to perform the refinement yourself, please run the shell script below.
+
+    ```bash
+    cd ./Transformer
+    bash get_checkpoint.sh
+    bash inference.sh
+    cd ../
+    ```
+
+    The input to the transformer is the `pose_dust` directory we provide by default.  
+    If you generated the poses yourself (i.e., by running step (2) in the previous section),  
+    you can update the `POSE_DIR` variable in the `inference.sh` script accordingly.
+
+
+    (3) Generate the point clouds with the refined poses.
+    
+    ```bash
+    bash generate_result3.sh
+    cd ../
+    ```
+### Reproducing the Bonus Point Clouds
+```bash
+cd ./source
+bash generate_bonus.sh
+cd ../
+```
+
+### Training the Customized Transformer
+All of the customized transformer files are placed in the `./source/Transformer` folder.
+
+## Other Utility Files
+* `color_image_to_video.py`
+* `ICP_correction.py`
+* `seq2ply.py`
+* `seq2ply_pred.py`
+* `utils.py`
