@@ -233,6 +233,14 @@ cd ../
 ### Training the Customized Transformer
 All of the customized transformer files are placed in the `./source/Transformer` folder.
 
+To train the customized transformer, you can run the shell script below.
+```bash
+cd ./source/Transformer
+python train.py
+```
+
+Here  we use the predicted poses in `pose_fast`, if you want to train with your own prediction, please refer to the struture in the `pose_fast` folder.
+
 ## Other Utility Files
 * `color_image_to_video.py`
 
