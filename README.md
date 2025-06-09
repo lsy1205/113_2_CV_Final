@@ -201,7 +201,8 @@ Then utilize the matrices transformation to get a more precise position.<br>
     cd ./source
     ```
     
-    (2) (Optional) Prdict Poses Using Fast3R
+    (2) (Optional) Prdict Poses Using Fast3R  
+    
     We have already provided the predicted poses in the `pose_fast` folder.  
     This step is only necessary if you wish to generate the poses yourself.
 
