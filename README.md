@@ -40,7 +40,7 @@ cd croco/models/curope/
 python setup.py build_ext --inplace
 cd ../../../
 ```
-3. Install Timm for Customized Transformer
+3. Install Timm and other packages for Customized Transformer, Download, and 3D Reconstruction
 ``` bash
 pip install timm 
 pip install gdown
@@ -70,7 +70,7 @@ pip install -r requirements.txt
 # install fast3r as a package (so you can import fast3r and use it in your own project)
 pip install -e .
 ```
-2. Install Timm for Customized Transformer
+2. Install Timm and other packages for Customized Transformer, Download, and 3D Reconstruction
 ``` bash
 pip install timm 
 pip install gdown
