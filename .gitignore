@@ -2,6 +2,7 @@
 temp
 __pycache__/
 DS_Store/
+__MACOSX
 
 # Dataset and Ground Truth
 7SCENES*
