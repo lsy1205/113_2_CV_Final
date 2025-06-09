@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SCENES_DIR="./7SCENES"
-POSE_DIR="./predict_pose"
+SCENES_DIR="../7SCENES"
+POSE_DIR="./pose_fast"
 
 for SEQ_PATH in "$SCENES_DIR"/*/t*/*; do
     REL_DIR=$(dirname "${SEQ_PATH#$SCENES_DIR/}")   # stairs/train

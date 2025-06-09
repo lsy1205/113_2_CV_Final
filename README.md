@@ -200,8 +200,20 @@ Then utilize the matrices transformation to get a more precise position.<br>
     ```bash
     cd ./source
     ```
+    
+    (2) (Optional) Prdict Poses Using Fast3R
+    We have already provided the predicted poses in the `pose_fast` folder.  
+    This step is only necessary if you wish to generate the poses yourself.
 
-    (2) (Optional) Refine Fast3R Poses Using a Customized Transformer. 
+    If you choose to do so, make sure to set up the environment for Fast3R beforehand.
+
+    ```bash
+    conda activate fast3r
+    bash generate_pose.sh
+    conda activate dust3r
+    ```
+
+    (3) (Optional) Refine Fast3R Poses Using a Customized Transformer. 
 
     This step is optional, as we have already provided the refined poses in the `refined_pose` directory.
 
