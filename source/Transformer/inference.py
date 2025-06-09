@@ -66,6 +66,6 @@ if __name__ == '__main__':
     ap.add_argument('--output_root',  required=True)
     ap.add_argument('--batch_size', type=int, default=24)
     args = ap.parse_args()
-    inference(args, path="train")
+    # inference(args, path="train")
     inference(args, path="test")
     

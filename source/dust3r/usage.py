@@ -20,12 +20,17 @@ if __name__ == '__main__':
     # load_images can take a list of images or a directory
     classification = ['chess', 'fire', 'heads', 'office', 'pumpkin', 'redkitchen', 'stairs'] #
     path = '../../7SCENES'
+    predict_path = '../predict_pose'
     for class_name in classification:
         joined_path = os.path.join(path, class_name, 'test')
         if not os.path.exists(joined_path):
             raise FileNotFoundError(f"Directory {joined_path} does not exist. Please check the path.")
         path_dir = sorted([os.path.join(joined_path, x) for x in os.listdir(joined_path)])
         for p in path_dir:
+            seq_name = os.path.basename(p)
+            save_path = os.path.join(predict_path, class_name, 'test', seq_name)
+            os.makedirs(save_path, exist_ok=True)
+
             path_final = sorted([os.path.join(p, x) for x in os.listdir(p) if x.endswith('.color.png') and x not in 'frame-000000.color.png'])
             path_compare = p + '/frame-000000.color.png'
             T0 = np.loadtxt(os.path.join(p, 'frame-000000.pose.txt'))
@@ -45,4 +50,7 @@ if __name__ == '__main__':
                 pose = W @ pose
                 key = pf[:-len('.color.png')]
                 x = key + '.pose.txt'
-                np.savetxt(x, pose, fmt='%.7e')
+
+                file_path = os.path.join(save_path, os.path.basename(x))
+                np.savetxt(file_path, pose, fmt='%.7e')
+                # np.savetxt(x, pose, fmt='%.7e')

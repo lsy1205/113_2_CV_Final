@@ -1,7 +1,9 @@
 #!/bin/bash
 
 DATASET_DIR="../../7SCENES"
+POSE_DIR="../pose_dust"
 DEST_DIR="./refined_pose"
+CHECKPOINT_PATH="./checkpoints/best.pth"
 
 for SEQ_PATH in "$DATASET_DIR"/*/t*/*; do
     POSE_FILE="$SEQ_PATH/frame-000000.pose.txt"
@@ -15,9 +17,10 @@ for SEQ_PATH in "$DATASET_DIR"/*/t*/*; do
 done
 
 echo "Finish copying frame 0 pose files."
+
 echo "Start to inference poses of all frames."
 
-python inference.py --data_root ../../7SCENES \
-                    --predict_root ../pose_dust \
-                    --ckpt checkpoints/best.pth \
+python inference.py --data_root $DATASET_DIR \
+                    --predict_root $POSE_DIR \
+                    --ckpt $CHECKPOINT_PATH \
                     --output_root $DEST_DIR

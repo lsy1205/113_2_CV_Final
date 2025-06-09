@@ -57,5 +57,5 @@ if __name__ == '__main__':
     rec_points = load_points_from_ply(args.rec_ply)
     acc, acc_median = accuracy(gt_points, rec_points)
     comp, comp_median = completion(gt_points, rec_points)
-    print(f"Accuracy: {acc:.4f}, Median Accuracy: {acc_median:.4f}")
-    print(f"Completeness: {comp:.4f}, Median Completeness: {comp_median:.4f}")
+    print(f"Accuracy: {acc}, Median Accuracy: {acc_median}")
+    print(f"Completeness: {comp}, Median Completeness: {comp_median}")
