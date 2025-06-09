@@ -9,9 +9,9 @@ TA_Golden
 
 # Point Clouds
 bonus
-test
-test_dust
-test_dust_transformer
+test/
+test_dust/
+test_dust_transformer/
 predict/
 
 # Transformer
