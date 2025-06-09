@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DATASET_DIR="../../7SCENES"
-POSE_DIR="../pose_dust"
+POSE_DIR="../pose_fast"
 DEST_DIR="./refined_pose"
 CHECKPOINT_PATH="./checkpoints/best.pth"
 
