@@ -193,7 +193,7 @@ Then utilize the matrices transformation to get a more precise position.<br>
     ```
 
 3. Use DUSt3R to generate initial pose predictions, applied post-processing, and then refined the results using a transformer-based model.<br>
-**Accuracy = 0.16, Completeness = 0.1**
+**Accuracy = 0.16, Completeness = 0.1**  
     (1) Go into the `source` directory
     ```bash
     cd ./source
@@ -239,7 +239,8 @@ cd ./source/Transformer
 python train.py
 ```
 
-Here  we use the predicted poses in `pose_fast`, if you want to train with your own prediction, please refer to the struture in the `pose_fast` folder.
+Here, we use the predicted poses provided in the `pose_fast` folder.  
+If you would like to train using your own predicted poses, please follow the same directory structure as used in `pose_fast`.
 
 ## Other Utility Files
 * `color_image_to_video.py`
