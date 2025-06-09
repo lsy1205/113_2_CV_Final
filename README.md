@@ -170,6 +170,8 @@ Then utilize the matrices transformation to get a more precise position.<br>
 
     Note that this process is quite time-consuming.
 
+    *The predicted poses may slightly differ from those provided in our directory, which can result in variations in accuracy and completeness.*
+
 
     ```bash
     cd ./dust3r/
@@ -202,9 +204,11 @@ Then utilize the matrices transformation to get a more precise position.<br>
     ```
     
     (2) (Optional) Prdict Poses Using Fast3R  
-    
+
     We have already provided the predicted poses in the `pose_fast` folder.  
     This step is only necessary if you wish to generate the poses yourself.
+
+    *The predicted poses may slightly differ from those provided in our directory, which can result in variations in accuracy and completeness.*
 
     If you choose to do so, make sure to set up the environment for Fast3R beforehand.
 
