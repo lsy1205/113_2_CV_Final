@@ -102,6 +102,11 @@ In this section, we demonstrate how to reproduce our results step by step.
 
 We will walk through the process of generating the three reconstruction results described earlier in the [Results](#results) section.
 
+**Please activate conda env dust3r for the following steps**
+```bash
+conda activate dust3r 
+```
+
 ### Preprocess
 Please place the **7SCENES** dataset folder in the root directory of this repository — that is, at the same level as the `source` directory.
 ```bash
