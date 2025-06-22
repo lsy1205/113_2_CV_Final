@@ -1,7 +1,7 @@
 # Miscellaneous
 temp
 __pycache__/
-DS_Store/
+.DS_Store
 __MACOSX
 
 # Dataset and Ground Truth
